@@ -4,10 +4,13 @@ import javax.jms.ConnectionFactory;
 import javax.jms.JMSException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+<<<<<<< HEAD
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
+=======
+>>>>>>> branch 'master' of https://github.com/theolorenzi/ProjetJMS.git
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,6 +28,7 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequestMapping("Banque")
 @Slf4j
+
 public class OperationSimpleController {
 
 	String messageRecu = "V" + "100000" + " IdCompteE: " + "234567" + " IdCompteD: " + "123456";
@@ -35,6 +39,7 @@ public class OperationSimpleController {
 
 	@Autowired
 	ICompteRepository icr;
+	
 
 	@PutMapping("retrait/{numCompte}/{montant}")
 	public boolean retrait(@PathVariable long numCompte, @PathVariable double montant) {
@@ -94,6 +99,8 @@ public class OperationSimpleController {
 			}
 		}
 	}
+	
+	
 
 	public String virementRequis(String messageRecu) {
 
