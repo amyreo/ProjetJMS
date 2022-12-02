@@ -12,7 +12,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table
+@Table (name = "CompteProjet")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -30,6 +30,7 @@ public class Compte {
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "idBanque")
 	private Banque banque;
+
 
 	public boolean autoriseRetrait(double retrait) {
 		double plafond = this.plafondRetrait;
