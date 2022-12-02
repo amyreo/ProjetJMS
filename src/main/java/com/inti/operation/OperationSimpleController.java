@@ -1,11 +1,19 @@
 package com.inti.operation;
 
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.inti.model.Compte;
 
-public class operationSimple {
+import lombok.extern.slf4j.Slf4j;
+@RestController
+@RequestMapping("Banque")
+@Slf4j
+public class OperationSimpleController {
 
-	public boolean retrait(Compte compte, double montant) {
-		if (compte.getDecouvertMax() > montant && compte.getPlafondRetrait() > montant) {
+	public boolean retrait(@RequestBody Compte compte, double montant) {
+		if (compte.getDecouvertMax() > (compte.getSolde()- montant) && compte.getPlafondRetrait() > montant) {
 			compte.setSolde(compte.getSolde() - montant);
 			System.out.println("le compte " + compte.getNumCompte() + " a ete debité de " + montant);
 			return true;
@@ -17,7 +25,7 @@ public class operationSimple {
 			return false;
 		}
 	}
-	public boolean depot(Compte compte, double montant) {
+	public boolean depot(@RequestBody Compte compte, double montant) {
 		if (compte.getPlafondDepot() > montant) {
 			compte.setSolde(compte.getSolde() + montant);
 			System.out.println("le compte " + compte.getNumCompte() + " a été augmenté de " + montant);
@@ -27,16 +35,6 @@ public class operationSimple {
 			return false;
 		}
 	}
-		public boolean virement(Compte compte, double montant) {
-			if (compte.getPlafondDepot() > montant) {
-				compte.setSolde(compte.getSolde() + montant);
-				System.out.println("le compte " + compte.getNumCompte() + " a été augmenté de " + montant);
-				return true;
-			} else {
-				System.out.println("le montant max du depot a été depassé");
-				return false;
-			}
 		
-	}
-	
 }
+	
