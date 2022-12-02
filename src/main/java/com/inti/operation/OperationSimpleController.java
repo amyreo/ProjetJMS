@@ -1,5 +1,7 @@
 package com.inti.operation;
 
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -11,9 +13,9 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("Banque")
 @Slf4j
 public class OperationSimpleController {
-
-	public boolean retrait(@RequestBody Compte compte, double montant) {
-		if (compte.getDecouvertMax() > (compte.getSolde()- montant) && compte.getPlafondRetrait() > montant) {
+	@PutMapping("retrait/{id}")
+	public boolean retrait(@RequestBody Compte compte,@PathVariable double montant) {
+		if (compte.getDecouvertMax() < (compte.getSolde()- montant) && compte.getPlafondRetrait() > montant) {
 			compte.setSolde(compte.getSolde() - montant);
 			System.out.println("le compte " + compte.getNumCompte() + " a ete debité de " + montant);
 			return true;
@@ -25,7 +27,8 @@ public class OperationSimpleController {
 			return false;
 		}
 	}
-	public boolean depot(@RequestBody Compte compte, double montant) {
+	@PutMapping("depot/{id}")
+	public boolean depot(@RequestBody Compte compte,@PathVariable double montant) {
 		if (compte.getPlafondDepot() > montant) {
 			compte.setSolde(compte.getSolde() + montant);
 			System.out.println("le compte " + compte.getNumCompte() + " a été augmenté de " + montant);
