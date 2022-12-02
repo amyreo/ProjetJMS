@@ -54,7 +54,7 @@ public class CompteController {
 	{
 		try {
 			log.info("Le compte a bien été afficher");
-			 icr.findById(numCompte).get();;
+			return icr.findById(numCompte).get();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
