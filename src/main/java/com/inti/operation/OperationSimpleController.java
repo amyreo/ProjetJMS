@@ -1,11 +1,8 @@
 package com.inti.operation;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,15 +21,14 @@ public class OperationSimpleController {
 	ICompteRepository icr;
 	
 
-	
-
 	@PutMapping("retrait/{numCompte}/{montant}")
 	public boolean retrait(@PathVariable long numCompte, @PathVariable double montant) {
 		Compte compte = icr.findById(numCompte).get();
 		if (compte.getDecouvertMax() < (compte.getSolde() - montant) && compte.getPlafondRetrait() > montant) {
 			compte.setSolde(compte.getSolde() - montant);
 			icr.save(compte);
-			System.out.println("le compte " + compte.getNumCompte() + " a ete debité de " + montant + "pour un total de " + compte.getSolde());
+			System.out.println("le compte " + compte.getNumCompte() + " a ete debité de " + montant
+					+ "pour un total de " + compte.getSolde());
 			return true;
 		} else if (compte.getPlafondRetrait() < montant) {
 			System.out.println("le montant max du retrait a été depassé");
@@ -49,7 +45,8 @@ public class OperationSimpleController {
 		if (compte.getPlafondDepot() > montant) {
 			compte.setSolde(compte.getSolde() + montant);
 			icr.save(compte);
-			System.out.println("le compte " + compte.getNumCompte() + " a été augmenté de " + montant + "pour un total de " + compte.getSolde());
+			System.out.println("le compte " + compte.getNumCompte() + " a été augmenté de " + montant
+					+ "pour un total de " + compte.getSolde());
 			return true;
 		} else {
 			System.out.println("le montant max du depot a été depassé");

@@ -15,6 +15,8 @@ import com.inti.service.ICompteRepository;
 @Component
 public class MessageSenderService {
 	
+	private static final String MESSAGE_QUEUE = "PROJETJMS";
+	
 	@Autowired
 	JmsTemplate jmsTemplate;
 	
@@ -28,8 +30,10 @@ public class MessageSenderService {
 	public String verifPlafond (@PathVariable long numCompteEnvoie, @PathVariable long numCompteDestinataire,  @PathVariable double montant) 
 	{
 		Compte compte = icr.findById(numCompteEnvoie).get();
+		
 		String verif = Boolean.toString(compte.autoriseRetrait(montant)) + "/" +  Long.toString(numCompteEnvoie) + "/" + Long.toString(numCompteDestinataire) + "/" + Double.toString(montant) ;
-		jmsTemplate.convertAndSend("PROJETJMS", verif);
+//		jmsTemplate.setDefaultDestinationName(MESSAGE_QUEUE);
+		jmsTemplate.convertAndSend(MESSAGE_QUEUE, verif);
 		return verif;
 	}
 	
