@@ -33,8 +33,10 @@ public class Compte {
 
 
 	public boolean autoriseRetrait(double retrait) {
+		double decouvertMax = this.decouvertMax;
 		double plafond = this.plafondRetrait;
-		return retrait < plafond;
+		double solde = this.solde;
+		return ((decouvertMax < solde - retrait) || (plafond > retrait));
 	}
 
 	public boolean autoriseDepot(double depot) {
