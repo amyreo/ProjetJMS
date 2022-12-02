@@ -1,6 +1,7 @@
 package com.inti.operation;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -16,10 +17,14 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequestMapping("Banque")
 @Slf4j
+
 public class OperationSimpleController {
 
 	@Autowired
 	ICompteRepository icr;
+	
+
+	
 
 	@PutMapping("retrait/{numCompte}/{montant}")
 	public boolean retrait(@PathVariable long numCompte, @PathVariable double montant) {
@@ -66,5 +71,7 @@ public class OperationSimpleController {
 		}
 
 	}
+	
+	
 
 }
