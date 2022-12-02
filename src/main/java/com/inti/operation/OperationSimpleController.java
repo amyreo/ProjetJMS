@@ -1,10 +1,16 @@
 package com.inti.operation;
 
+import java.io.File;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.jms.annotation.JmsListener;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -20,6 +26,7 @@ public class OperationSimpleController {
 
 	@Autowired
 	ICompteRepository icr;
+	
 
 	@PutMapping("retrait/{numCompte}/{montant}")
 	public boolean retrait(@PathVariable long numCompte, @PathVariable double montant) {
@@ -27,7 +34,8 @@ public class OperationSimpleController {
 		if (compte.getDecouvertMax() < (compte.getSolde() - montant) && compte.getPlafondRetrait() > montant) {
 			compte.setSolde(compte.getSolde() - montant);
 			icr.save(compte);
-			System.out.println("le compte " + compte.getNumCompte() + " a ete debité de " + montant + "pour un total de " + compte.getSolde());
+			System.out.println("le compte " + compte.getNumCompte() + " a ete debité de " + montant
+					+ "pour un total de " + compte.getSolde());
 			return true;
 		} else if (compte.getPlafondRetrait() < montant) {
 			System.out.println("le montant max du retrait a été depassé");
@@ -44,7 +52,8 @@ public class OperationSimpleController {
 		if (compte.getPlafondDepot() > montant) {
 			compte.setSolde(compte.getSolde() + montant);
 			icr.save(compte);
-			System.out.println("le compte " + compte.getNumCompte() + " a été augmenté de " + montant + "pour un total de " + compte.getSolde());
+			System.out.println("le compte " + compte.getNumCompte() + " a été augmenté de " + montant
+					+ "pour un total de " + compte.getSolde());
 			return true;
 		} else {
 			System.out.println("le montant max du depot a été depassé");
