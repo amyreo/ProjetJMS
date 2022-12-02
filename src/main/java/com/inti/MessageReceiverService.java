@@ -11,26 +11,29 @@ import com.inti.service.ICompteRepository;
 @Component
 public class MessageReceiverService {
 
+	private static final String MESSAGE_QUEUE = "PROJETJMS";
+	
 	@Autowired
 	ICompteRepository icr;
 
 	@Autowired
 	OperationSimpleController osc;
 
-	@JmsListener(destination = "PROJETJMS")
-	public boolean listener(String infos) {
-		String[] infosArray = infos.split("/");
-		String verif = infosArray[0];
+	@JmsListener(destination = MESSAGE_QUEUE)
+	public void listener(String verif) {
+		System.out.println(verif);
+		String[] infosArray = verif.split("/");
+		String verif1 = infosArray[0];
 		Long numEnvoi = Long.parseLong(infosArray[1]);
 		Long numDestinataire = Long.parseLong(infosArray[2]);
 		Double montant = Double.parseDouble(infosArray[3]);
-		if (verif == "true") {
+		if (verif1.equals("true")) {
 			Compte destinataire = icr.findById(numDestinataire).get();
 			boolean verifDestinataire = destinataire.autoriseDepot(montant);
 			osc.virement(numEnvoi, numDestinataire, montant);
-			return verifDestinataire;
+			System.out.println("CA MARCHE");
 		} else {
-			return false;
+			System.out.println("CA MARCHE PO");
 		}
 
 	}
