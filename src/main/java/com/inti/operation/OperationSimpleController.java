@@ -21,11 +21,13 @@ public class OperationSimpleController {
 	@Autowired
 	ICompteRepository icr;
 
-	@PutMapping("retrait/{montant}")
-	public boolean retrait(@RequestBody Compte compte, @PathVariable double montant) {
+	@PutMapping("retrait/{numCompte}/{montant}")
+	public boolean retrait(@PathVariable long numCompte, @PathVariable double montant) {
+		Compte compte = icr.findById(numCompte).get();
 		if (compte.getDecouvertMax() < (compte.getSolde() - montant) && compte.getPlafondRetrait() > montant) {
 			compte.setSolde(compte.getSolde() - montant);
-			System.out.println("le compte " + compte.getNumCompte() + " a ete debité de " + montant);
+			icr.save(compte);
+			System.out.println("le compte " + compte.getNumCompte() + " a ete debité de " + montant + "pour un total de " + compte.getSolde());
 			return true;
 		} else if (compte.getPlafondRetrait() < montant) {
 			System.out.println("le montant max du retrait a été depassé");
@@ -36,11 +38,13 @@ public class OperationSimpleController {
 		}
 	}
 
-	@PutMapping("depot/{montant}")
-	public boolean depot(@RequestBody Compte compte, @PathVariable double montant) {
+	@PutMapping("depot/{numCompte}/{montant}")
+	public boolean depot(@PathVariable long numCompte, @PathVariable double montant) {
+		Compte compte = icr.findById(numCompte).get();
 		if (compte.getPlafondDepot() > montant) {
 			compte.setSolde(compte.getSolde() + montant);
-			System.out.println("le compte " + compte.getNumCompte() + " a été augmenté de " + montant);
+			icr.save(compte);
+			System.out.println("le compte " + compte.getNumCompte() + " a été augmenté de " + montant + "pour un total de " + compte.getSolde());
 			return true;
 		} else {
 			System.out.println("le montant max du depot a été depassé");
@@ -48,14 +52,14 @@ public class OperationSimpleController {
 		}
 	}
 
-	@GetMapping("/virement/{idEnvoyeur}/{idDestinataire}/{montant}")
+	@PutMapping("/virement/{idEnvoyeur}/{idDestinataire}/{montant}")
 	public String virement(@PathVariable long idEnvoyeur, @PathVariable long idDestinataire,
 			@PathVariable double montant) {
 		Compte envoyeur = icr.findById(idEnvoyeur).get();
 		Compte destinataire = icr.findById(idDestinataire).get();
 		if (envoyeur.autoriseRetrait(montant) || destinataire.autoriseDepot(montant)) {
-			retrait(envoyeur, montant);
-			depot(destinataire, montant);
+			retrait(idEnvoyeur, montant);
+			depot(idDestinataire, montant);
 			return "Le virement a bien été effectué";
 		} else {
 			return "Une erreur est survenue pendant le virement";
