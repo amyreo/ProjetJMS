@@ -13,7 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("Banque")
 @Slf4j
 public class OperationSimpleController {
-	@PutMapping("retrait/{id}")
+	@PutMapping("retrait/{montant}")
 	public boolean retrait(@RequestBody Compte compte,@PathVariable double montant) {
 		if (compte.getDecouvertMax() < (compte.getSolde()- montant) && compte.getPlafondRetrait() > montant) {
 			compte.setSolde(compte.getSolde() - montant);
@@ -27,7 +27,7 @@ public class OperationSimpleController {
 			return false;
 		}
 	}
-	@PutMapping("depot/{id}")
+	@PutMapping("depot/{montant}")
 	public boolean depot(@RequestBody Compte compte,@PathVariable double montant) {
 		if (compte.getPlafondDepot() > montant) {
 			compte.setSolde(compte.getSolde() + montant);
