@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Compte {
-	
+
 	@Id
 	private long numCompte;
 	private String nomProprio;
@@ -26,13 +26,20 @@ public class Compte {
 	private double solde;
 	private double aggio;
 	private double decouvertMax;
-	
-	@ManyToOne (cascade = CascadeType.ALL)
-	@JoinColumn (name = "idBanque")
+
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "idBanque")
 	private Banque banque;
-	
-	
-	
-	
+
+
+	public boolean autoriseRetrait(double retrait) {
+		double plafond = this.plafondRetrait;
+		return retrait < plafond;
+	}
+
+	public boolean autoriseDepot(double depot) {
+		double plafond = this.plafondDepot;
+		return depot < plafond;
+	}
 
 }
