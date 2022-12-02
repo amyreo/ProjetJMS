@@ -1,14 +1,10 @@
 package com.inti.operation;
 
-import java.io.File;
-
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.stereotype.Component;
+
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,6 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequestMapping("Banque")
 @Slf4j
+
 public class OperationSimpleController {
 
 	@Autowired
@@ -75,5 +72,7 @@ public class OperationSimpleController {
 		}
 
 	}
+	
+	
 
 }
